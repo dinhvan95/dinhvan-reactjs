@@ -3,7 +3,7 @@ export const account = [
     {
         name: 'Nguyen Van A',
         accountNumber: '01234OPT',
-        totalMoney: 15000000
+        totalMoney: 150000000
     },
 
     {
