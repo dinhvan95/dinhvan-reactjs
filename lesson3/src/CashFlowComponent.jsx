@@ -13,7 +13,7 @@ const ErrorText = styled.div`
     text-align : start;
 `;
 export default function CashFlowComponent({account, typeAccount, banks}) {
-    const [totalmoneyAccountChecked, setTotalmoneyAccountChecked] = useState(0);
+    const [totalmoneyAccountChecked, setTotalmoneyAccountChecked] = useState(account[0].totalMoney);
     const [displayDifferentBank, setDisplayDifferentBank] = useState(0);
     const [moneyIsSent, setMoneyIsSent] = useState(0);
     const [note, setNote] = useState("");
@@ -106,7 +106,8 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                             )
                         }
                     </select>
-                    <br/><b>Số tiền có thể chuyển: {totalmoneyAccountChecked} VNĐ</b>
+                    <br/><b>Số tiền có thể chuyển: {totalmoneyAccountChecked.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+} VNĐ</b>
                 </div>
                 <div className="m-3">
                     <label className="form-label">Loại tài khoản</label>
@@ -172,7 +173,7 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                         </ErrorText>)
                     }
                     <br/><b>Phí chuyển tiền: </b>
-                    <b>{moneyIsSent/50} VNĐ</b>
+                    <b>{Math.floor(moneyIsSent/50).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} VNĐ</b>
                 </div>
                 <div className="m-3">
                     <label className="form-label" style={{ width: "100%", textAlign: "start" }}>

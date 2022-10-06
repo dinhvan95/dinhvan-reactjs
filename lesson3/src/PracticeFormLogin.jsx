@@ -45,7 +45,7 @@ export default function PracticeFormLogin() {
             return setError(
                 (pre) => (
                     pre = {
-                        ...error,
+                        ...pre,
                         isErrorUsername: true,
                         messageErrorUsername: "This field is not empty",
                     }
@@ -55,7 +55,7 @@ export default function PracticeFormLogin() {
         return setError(
             (pre) => (
                 pre = {
-                    ...error,
+                    ...pre,
                     isErrorUsername: false,
                     messageErrorUsername: "",
                 }
@@ -76,7 +76,7 @@ export default function PracticeFormLogin() {
             return setError(
                 (pre) => (
                     pre = {
-                        ...error,
+                        ...pre,
                         isErrorPassword: true,
                         messageErrorPassword: "Password should be at least 8 characters",
                     }
