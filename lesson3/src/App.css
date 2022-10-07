@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+.container {
+  padding: "1em";
+  border: "1px solid #EBECEE";
+  border-radius: "2px";
+}
+h2 {
+  text-align : "center";
+}
+.m-3 label {
+  width: "100%";
+  text-align: "start";
+}
+.m-3 select input, textarea {
+  background-color: "#EBECEE";
+}
+
+
