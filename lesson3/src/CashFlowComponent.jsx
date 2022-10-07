@@ -13,8 +13,13 @@ const ErrorText = styled.div`
     text-align : start;
 `;
 export default function CashFlowComponent({account, typeAccount, banks}) {
+    const [displayDifferentBank, setDisplayDifferentBank] = useState(typeAccount[0].value);
     const [totalmoneyAccountChecked, setTotalmoneyAccountChecked] = useState(account[0].totalMoney);
-    const [displayDifferentBank, setDisplayDifferentBank] = useState(0);
+    const [differentBank, setDifferentBank] = useState("");
+    const [bankIsReceived, setBankIsReceived] = useState(banks[0].name);
+    const [branchBank, setBranchBank] = useState(banks[0].branch);
+    const [accountIsReceived, setAccountIsReceived] = useState("");
+
     const [moneyIsSent, setMoneyIsSent] = useState(0);
     const [note, setNote] = useState("");
     const [isSubmit, setIsSubmit] = useState(false);
@@ -28,9 +33,42 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
         isOverChar : false,
         messageOverChar : "",
     });
+    const [errorSubmit, setErrorSubmit] = useState({
+        isErrorDifferentBank : false,
+        isErrorAccountIsReceived : false,
+        isErrorMoneySent : false,
+        messageErrorDifferentBank : "",
+        messageErrorAccountIsReceived : "",
+        messageErrorMoneySent : false,
+    }) 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmit(true);
+        if(displayDifferentBank == 2){
+            if(
+                totalmoneyAccountChecked.length > 0 && 
+                differentBank.length > 0  && 
+                branchBank.length > 0 && 
+                bankIsReceived.length > 0 &&
+                accountIsReceived.length > 0 &&
+                moneyIsSent.length > 0 
+                ) {
+                    alert("Submit cash flow successfully");
+                } else {
+                    alert("Submit cash flow failly! Please try again");
+                }
+        } else {
+            if(
+                totalmoneyAccountChecked.length > 0 && 
+                branchBank.length > 0 &&
+                bankIsReceived.length > 0 &&
+                accountIsReceived.length > 0 &&
+                moneyIsSent.length > 0
+            ){
+                alert("Submit cash flow successfully");
+            } else {
+                alert("Submit cash flow failly! Please try again");
+            }
+        }
     }
     useEffect(() => {
         if(note.length > 140){
@@ -123,13 +161,14 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                         }
                     </select>
                 </div>
+                {/**resolve errorSubmit here*/}
                 <div className="m-3" style = {{display : displayDifferentBank == 2 ? "block" : "none"}}>
                     <label className="form-label">Ngân hàng khác</label>
-                    <input style={{ backgroundColor: "#EBECEE" }} type='text' className="form-control" />
+                    <input style={{ backgroundColor: "#EBECEE" }} type='text' className="form-control" onChange={(e) => setDifferentBank((pre) => (pre = e.target.value))}/>
                 </div>
                 <div className="m-3">
                     <label className="form-label">Ngân hàng thụ hưởng</label>
-                    <select style={{ backgroundColor: "#EBECEE" }} className="form-select" aria-label="Default select example">
+                    <select style={{ backgroundColor: "#EBECEE" }} className="form-select" aria-label="Default select example" onChange={(e) => setBankIsReceived((pre) => (pre = e.target.value))}>
                         {
                             banks.map(
                                 ({name, key, branch}) => {
@@ -143,7 +182,7 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                 </div>
                 <div className="m-3">
                     <label className="form-label">Chi nhánh</label>
-                    <select style={{ backgroundColor: "#EBECEE" }} className="form-select" aria-label="Default select example">
+                    <select style={{ backgroundColor: "#EBECEE" }} className="form-select" aria-label="Default select example" onChange={(e) => setBranchBank((pre) => (pre = e.target.value))}>
         
                         {
                             banks.map(
@@ -156,12 +195,14 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                         }
                     </select>
                 </div>
+                {/**resolve errorSubmit here*/}
                 <div className="m-3">
                     <label className='form-label' style={{ width: "100%", textAlign: "start" }}>
                         Số tài khoản thụ hưởng
                     </label>
-                    <input style={{ backgroundColor: "#EBECEE" }} type='text' className="form-control" />
+                    <input style={{ backgroundColor: "#EBECEE" }} type='text' className="form-control" onChange={(e) => setAccountIsReceived((pre) => (pre = e.target.value))}/>
                 </div>
+                {/**resolve errorSubmit here*/}
                 <div className="m-3">
                     <label className='form-label' style={{ width: "100%", textAlign: "start" }}>
                         Số tiền chuyển
