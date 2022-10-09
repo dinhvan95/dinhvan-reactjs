@@ -12,7 +12,7 @@ const ErrorText = styled.div`
     color : red;
     text-align : start;
 `;
-export default function CashFlowComponent({account, typeAccount, banks}) {
+export default function CashFlowComponent({ account, typeAccount, banks }) {
     const [displayDifferentBank, setDisplayDifferentBank] = useState(typeAccount[0].value);
     const [totalmoneyAccountChecked, setTotalmoneyAccountChecked] = useState(account[0].totalMoney);
     const [differentBank, setDifferentBank] = useState("");
@@ -25,45 +25,44 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
     const [isSubmit, setIsSubmit] = useState(false);
     const [error, setError] = useState(
         {
-            isErrorMoneySent : false,
-            messageErrorMoney : "",
+            isErrorMoneySent: false,
+            messageErrorMoney: "",
         }
     );
     const [errorNote, setErrorNote] = useState({
-        isOverChar : false,
-        messageOverChar : "",
+        isOverChar: false,
+        messageOverChar: "",
     });
     const [errorSubmit, setErrorSubmit] = useState({
-        isErrorDifferentBank : false,
-        isErrorAccountIsReceived : false,
-        isErrorMoneySent : false,
-        messageErrorDifferentBank : "",
-        messageErrorAccountIsReceived : "",
-        messageErrorMoneySent : false,
-    }) 
+        isErrorDifferentBank: false,
+        isErrorAccountIsReceived: false,
+        messageErrorDifferentBank: "",
+        messageErrorAccountIsReceived: "",
+    })
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(displayDifferentBank == 2){
-            if(
-                totalmoneyAccountChecked.length > 0 && 
-                differentBank.length > 0  && 
-                branchBank.length > 0 && 
-                bankIsReceived.length > 0 &&
-                accountIsReceived.length > 0 &&
-                moneyIsSent.length > 0 
-                ) {
-                    alert("Submit cash flow successfully");
-                } else {
-                    alert("Submit cash flow failly! Please try again");
-                }
+        setIsSubmit(true);
+        if (displayDifferentBank == 2) {
+            if (
+                totalmoneyAccountChecked.length  &&
+                differentBank.length &&
+                branchBank.length &&
+                bankIsReceived.length &&
+                accountIsReceived.length &&
+                moneyIsSent.length
+            ) {
+                alert("Submit cash flow successfully");
+            } else {
+                alert("Submit cash flow failly! Please try again");
+            }
         } else {
-            if(
-                totalmoneyAccountChecked.length > 0 && 
-                branchBank.length > 0 &&
-                bankIsReceived.length > 0 &&
-                accountIsReceived.length > 0 &&
-                moneyIsSent.length > 0
-            ){
+            if (
+                totalmoneyAccountChecked.length &&
+                branchBank.length &&
+                bankIsReceived.length &&
+                accountIsReceived.length &&
+                moneyIsSent.length
+            ) {
                 alert("Submit cash flow successfully");
             } else {
                 alert("Submit cash flow failly! Please try again");
@@ -71,7 +70,7 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
         }
     }
     useEffect(() => {
-        if(note.length > 140){
+        if (note.length > 140) {
             return setErrorNote(
                 (pre) => (
                     pre = {
@@ -91,9 +90,9 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                 }
             )
         );
-    },[note,isSubmit]);
+    }, [note, isSubmit]);
     useEffect(() => {
-        if(moneyIsSent < 0){
+        if (moneyIsSent < 0) {
             return setError(
                 (pre) => (
                     pre = {
@@ -104,13 +103,24 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                 )
             );
         }
-        if(moneyIsSent - totalmoneyAccountChecked > 0){
+        if (moneyIsSent - totalmoneyAccountChecked > 0) {
             return setError(
                 (pre) => (
                     pre = {
                         ...error,
-                        isErrorMoneySent : true,
+                        isErrorMoneySent: true,
                         messageErrorMoney: "Sorry. Money need to sent is larger than your total money. Please check again!",
+                    }
+                )
+            );
+        }
+        if (!moneyIsSent.length) {
+            return setError(
+                (pre) => (
+                    pre = {
+                        ...error,
+                        isErrorMoneySent: true,
+                        messageErrorMoney: "This field is not empty",
                     }
                 )
             );
@@ -119,15 +129,61 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
             (pre) => (
                 pre = {
                     ...error,
-                    isErrorMoneySent : false,
-                    messageErrorMoney : "",
+                    isErrorMoneySent: false,
+                    messageErrorMoney: "",
                 }
             )
         );
     }, [moneyIsSent, isSubmit]);
+    useEffect(() => {
+        if (displayDifferentBank == 2) {
+            if (!differentBank.trim().length) {
+                return setErrorSubmit(
+                    (pre) => (
+                        pre = {
+                            ...pre,
+                            isErrorDifferentBank: true,
+                            messageErrorDifferentBank: "This field is not empty",
+                        }
+                    )
+                );
+            }
+            return setErrorSubmit(
+                (pre) => (
+                    pre = {
+                        ...pre,
+                        isErrorDifferentBank: false,
+                        messageErrorDifferentBank: "",
+                    }
+                )
+            );
+        }
+    }, [differentBank, isSubmit]);
+    useEffect(() => {
+        if (!accountIsReceived.trim().length) {
+            return setErrorSubmit(
+                (pre) => (
+                    pre = {
+                        ...pre,
+                        isErrorAccountIsReceived: true,
+                        messageErrorAccountIsReceived: "This field is not empty",
+                    }
+                )
+            );
+        }
+        return setErrorSubmit(
+            (pre) => (
+                pre = {
+                    ...pre,
+                    isErrorAccountIsReceived: false,
+                    messageErrorAccountIsReceived: "",
+                }
+            )
+        );
+    }, [accountIsReceived, isSubmit]);
     return (
-        <div style={{padding: "1em", border: "1px solid #EBECEE", borderRadius: "2px",}}>
-            <h2 className="m-3" style={{textAlign:"center"}}>Chuyển khoản ngân hàng</h2>
+        <div style={{ padding: "1em", border: "1px solid #EBECEE", borderRadius: "2px", }}>
+            <h2 className="m-3" style={{ textAlign: "center" }}>Chuyển khoản ngân hàng</h2>
             <form onSubmit={(e) => handleSubmit(e)}>
                 <div className="m-3">
                     <label className='form-label' style={{ width: "100%", textAlign: "start" }}>
@@ -136,7 +192,7 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                     <select style={{ backgroundColor: "#EBECEE" }} className="form-select" aria-label="Default select example" onChange={(e) => setTotalmoneyAccountChecked((pre) => (pre = e.target.value))}>
                         {
                             account.map(
-                                ({name, accountNumber, totalMoney}, key) => {
+                                ({ name, accountNumber, totalMoney }, key) => {
                                     return (
                                         <option value={totalMoney}>{accountNumber} - {name}</option>
                                     );
@@ -144,15 +200,15 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                             )
                         }
                     </select>
-                    <br/><b>Số tiền có thể chuyển: {totalmoneyAccountChecked.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-} VNĐ</b>
+                    <br /><b>Số tiền có thể chuyển: {totalmoneyAccountChecked.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    } VNĐ</b>
                 </div>
                 <div className="m-3">
                     <label className="form-label">Loại tài khoản</label>
                     <select style={{ backgroundColor: "#EBECEE" }} className="form-select" aria-label="Default select example" onChange={(e) => setDisplayDifferentBank((pre) => (pre = e.target.value))}>
                         {
                             typeAccount.map(
-                                ({name, key, value}) => {
+                                ({ name, key, value }) => {
                                     return (
                                         <option value={value}>{name}</option>
                                     );
@@ -162,18 +218,23 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                     </select>
                 </div>
                 {/**resolve errorSubmit here*/}
-                <div className="m-3" style = {{display : displayDifferentBank == 2 ? "block" : "none"}}>
+                <div className="m-3" style={{ display: displayDifferentBank == 2 ? "block" : "none" }}>
                     <label className="form-label">Ngân hàng khác</label>
-                    <input style={{ backgroundColor: "#EBECEE" }} type='text' className="form-control" onChange={(e) => setDifferentBank((pre) => (pre = e.target.value))}/>
+                    <input style={{ backgroundColor: "#EBECEE" }} type='text' className="form-control" onChange={(e) => setDifferentBank((pre) => (pre = e.target.value))} />
+                    {errorSubmit.isErrorDifferentBank && isSubmit && (
+                        <ErrorText className='form-text danger'>
+                            {errorSubmit.messageErrorDifferentBank}
+                        </ErrorText>
+                    )}
                 </div>
                 <div className="m-3">
                     <label className="form-label">Ngân hàng thụ hưởng</label>
                     <select style={{ backgroundColor: "#EBECEE" }} className="form-select" aria-label="Default select example" onChange={(e) => setBankIsReceived((pre) => (pre = e.target.value))}>
                         {
                             banks.map(
-                                ({name, key, branch}) => {
+                                ({ name, key, branch }) => {
                                     return (
-                                        <option value={key+1}>{name}</option>
+                                        <option value={key + 1}>{name}</option>
                                     );
                                 }
                             )
@@ -183,12 +244,12 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                 <div className="m-3">
                     <label className="form-label">Chi nhánh</label>
                     <select style={{ backgroundColor: "#EBECEE" }} className="form-select" aria-label="Default select example" onChange={(e) => setBranchBank((pre) => (pre = e.target.value))}>
-        
+
                         {
                             banks.map(
-                                ({name, key, branch}) => {
+                                ({ name, key, branch }) => {
                                     return (
-                                        <option value={key+1}>{branch}</option>
+                                        <option value={key + 1}>{branch}</option>
                                     );
                                 }
                             )
@@ -200,27 +261,32 @@ export default function CashFlowComponent({account, typeAccount, banks}) {
                     <label className='form-label' style={{ width: "100%", textAlign: "start" }}>
                         Số tài khoản thụ hưởng
                     </label>
-                    <input style={{ backgroundColor: "#EBECEE" }} type='text' className="form-control" onChange={(e) => setAccountIsReceived((pre) => (pre = e.target.value))}/>
+                    <input style={{ backgroundColor: "#EBECEE" }} type='text' className="form-control" onChange={(e) => setAccountIsReceived((pre) => (pre = e.target.value))} />
+                    {errorSubmit.isErrorAccountIsReceived && isSubmit && (
+                        <ErrorText className='form-text danger'>
+                            {errorSubmit.messageErrorAccountIsReceived}
+                        </ErrorText>
+                    )}
                 </div>
                 {/**resolve errorSubmit here*/}
                 <div className="m-3">
                     <label className='form-label' style={{ width: "100%", textAlign: "start" }}>
                         Số tiền chuyển
                     </label>
-                    <input style={{ backgroundColor: "#EBECEE" }} type='number' className="form-control" onChange={(e) => setMoneyIsSent((pre) => (pre = (e.target.value)))}/>
+                    <input style={{ backgroundColor: "#EBECEE" }} type='number' className="form-control" onChange={(e) => setMoneyIsSent((pre) => (pre = (e.target.value)))} />
                     {
-                        error.isErrorMoneySent && (<ErrorText  className="form-text danger">
+                        error.isErrorMoneySent && isSubmit && (<ErrorText className="form-text danger">
                             {error.messageErrorMoney}
                         </ErrorText>)
                     }
-                    <br/><b>Phí chuyển tiền: </b>
-                    <b>{Math.floor(moneyIsSent/50).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} VNĐ</b>
+                    <br /><b>Phí chuyển tiền: </b>
+                    <b>{Math.floor(moneyIsSent / 50).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} VNĐ</b>
                 </div>
                 <div className="m-3">
                     <label className="form-label" style={{ width: "100%", textAlign: "start" }}>
                         Diễn giải
                     </label>
-                    <textarea style={{ backgroundColor: "#EBECEE" }} className="form-control" placeholder="Nhập tiếng Việt không dấu, tối đa 140 kí tự" onChange={(e) => setNote((pre) => (pre = e.target.value))}/>
+                    <textarea style={{ backgroundColor: "#EBECEE" }} className="form-control" placeholder="Nhập tiếng Việt không dấu, tối đa 140 kí tự" onChange={(e) => setNote((pre) => (pre = e.target.value))} />
                     {
                         errorNote.isOverChar && (
                             <ErrorText>
